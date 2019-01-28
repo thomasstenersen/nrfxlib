@@ -19,6 +19,44 @@ config BT_LL_NRFXLIB
 
 endchoice
 
+choice CLOCK_CONTROL_NRF5_IMPL
+        bool
+        prompt "nRF5 Clock controller implementation"
+        default CLOCK_CONTROL_NRF5_NRFXLIB if BT_LL_NRFXLIB
+
+config CLOCK_CONTROL_NRF5_NRFXLIB
+        bool "nRF5 Clock controller from nrfxlib"
+        depends on BT_LL_NRFXLIB
+        help
+          Use Nordic BLE Link Layer implementation.
+
+endchoice
+
+choice CLOCK_CONTROL_NR5_SOURCE
+        prompt "32KHz clock source"
+
+config CLOCK_CONTROL_NRF5_K32SRC_SYNTH
+        bool "Synthesized from HFCLK"
+
+endchoice
+
+choice CLOCK_CONTROL_NR5_ACCURACY
+        prompt "32KHz clock accuracy"
+
+config CLOCK_CONTROL_NRF5_K32SRC_10PPM
+        bool "6 ppm to 10 ppm"
+
+config CLOCK_CONTROL_NRF5_K32SRC_5PPM
+        bool "3 ppm to 5 ppm"
+
+config CLOCK_CONTROL_NRF5_K32SRC_2PPM
+        bool "2 ppm"
+
+config CLOCK_CONTROL_NRF5_K32SRC_1PPM
+        bool "1 ppm"
+
+endchoice
+
 if BT_LL_NRFXLIB
 
 comment "Common BLE Controller module configuration"
