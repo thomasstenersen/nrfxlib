@@ -8,54 +8,77 @@
 # now with additional properties. Note that the dependencies of the
 # original config must be duplicated to not affect it's visibility.
 choice BT_LL_CHOICE
-	   bool
-	   depends on (BT_CTLR && BT_HCI && BT)
+	bool
+	depends on (BT_CTLR && BT_HCI && BT)
 
 config BT_LL_NRFXLIB
 	bool "Nordic proprietary BLE Link Layer"
 	select ZERO_LATENCY_IRQS
+	select ENTROPY_NRF5_RNG
 	help
 	  Use Nordic BLE Link Layer implementation.
 
 endchoice
 
 choice CLOCK_CONTROL_NRF5_IMPL
-        bool
-        prompt "nRF5 Clock controller implementation"
-        default CLOCK_CONTROL_NRF5_NRFXLIB if BT_LL_NRFXLIB
+	bool
+	prompt "nRF5 Clock controller implementation"
+	default CLOCK_CONTROL_NRF5_NRFXLIB if BT_LL_NRFXLIB
 
 config CLOCK_CONTROL_NRF5_NRFXLIB
-        bool "nRF5 Clock controller from nrfxlib"
-        depends on BT_LL_NRFXLIB
-        help
-          Use Nordic BLE Link Layer implementation.
+	bool "nRF5 Clock controller from nrfxlib"
+	depends on BT_LL_NRFXLIB
+	help
+	  Use Nordic BLE Link Layer implementation.
 
 endchoice
 
 choice CLOCK_CONTROL_NR5_SOURCE
-        prompt "32KHz clock source"
+	prompt "32KHz clock source"
 
 config CLOCK_CONTROL_NRF5_K32SRC_SYNTH
-        bool "Synthesized from HFCLK"
+	bool "Synthesized from HFCLK"
 
 endchoice
 
 choice CLOCK_CONTROL_NR5_ACCURACY
-        prompt "32KHz clock accuracy"
+	prompt "32KHz clock accuracy"
 
 config CLOCK_CONTROL_NRF5_K32SRC_10PPM
-        bool "6 ppm to 10 ppm"
+	bool "6 ppm to 10 ppm"
 
 config CLOCK_CONTROL_NRF5_K32SRC_5PPM
-        bool "3 ppm to 5 ppm"
+	bool "3 ppm to 5 ppm"
 
 config CLOCK_CONTROL_NRF5_K32SRC_2PPM
-        bool "2 ppm"
+	bool "2 ppm"
 
 config CLOCK_CONTROL_NRF5_K32SRC_1PPM
-        bool "1 ppm"
+	bool "1 ppm"
+
+endchoice #CLOCK_CONTROL_NR5_ACCURACY
+
+if ENTROPY_NRF5_RNG
+
+choice ENTROPY_NRF5_RNG_IMPL
+	bool "nRF5 RNG driver implementation"
+	default ENTROPY_NRF5_RNG_NRFXLIB if BT_LL_NRFXLIB
+	help
+	  Choose the driver implementation
+
+# Selection of ENTROPY_HAS_DRIVER is removed to prevent compilation
+# fail because of no source is provided to library
+config ENTROPY_NRF5_RNG_NRFXLIB
+	bool "nRF5 RNG driver from nrfxlib"
+	depends on BT_LL_NRFXLIB
+	help
+	  This option enables the RNG peripheral, which is a random number
+	  generator, based on internal thermal noise, that provides a
+	  random 8-bit value to the host when read.
 
 endchoice
+
+endif #ENTROPY_NRF5_RNG
 
 if BT_LL_NRFXLIB
 
