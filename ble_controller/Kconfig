@@ -74,6 +74,7 @@ choice ENTROPY_NRF5_RNG_IMPL
 config ENTROPY_NRF5_RNG_NRFXLIB
 	bool "nRF5 RNG driver from nrfxlib"
 	depends on BT_LL_NRFXLIB
+        select ENTROPY_HAS_DRIVER
 	help
 	  This option enables the RNG peripheral, which is a random number
 	  generator, based on internal thermal noise, that provides a
