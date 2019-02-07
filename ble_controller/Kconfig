@@ -15,6 +15,7 @@ config BT_LL_NRFXLIB
 	bool "Nordic proprietary BLE Link Layer"
 	select ZERO_LATENCY_IRQS
 	select ENTROPY_NRF5_RNG
+    select ENTROPY_GENERATOR
 	help
 	  Use Nordic BLE Link Layer implementation.
 
