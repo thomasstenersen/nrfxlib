@@ -14,76 +14,13 @@ choice BT_LL_CHOICE
 config BT_LL_NRFXLIB
 	bool "Nordic proprietary BLE Link Layer"
 	select ZERO_LATENCY_IRQS
-	select ENTROPY_NRF5_RNG
-	select ENTROPY_GENERATOR
+	select FLASH_HAS_SUBSYS_DRIVER
+	select ENTROPY_HAS_SUBSYS_DRIVER
+	select CLOCK_CONTROL_HAS_SUBSYS_DRIVER
 	help
 	  Use Nordic BLE Link Layer implementation.
 
 endchoice
-
-if CLOCK_CONTROL_NRF5
-
-choice CLOCK_CONTROL_NRF5_IMPL
-	bool "nRF5 Clock controller implementation"
-	default CLOCK_CONTROL_NRF5_NRFXLIB if BT_LL_NRFXLIB
-	help
-	  Choose the driver implementation
-
-config CLOCK_CONTROL_NRF5_NRFXLIB
-	bool "nRF5 Clock controller from nrfxlib"
-	  depends on BT_LL_NRFXLIB
-
-endchoice
-
-endif #CLOCK_CONTROL_NRF5
-
-choice CLOCK_CONTROL_NR5_SOURCE
-	prompt "32KHz clock source"
-
-config CLOCK_CONTROL_NRF5_K32SRC_SYNTH
-	bool "Synthesized from HFCLK"
-
-endchoice
-
-choice CLOCK_CONTROL_NR5_ACCURACY
-	prompt "32KHz clock accuracy"
-
-config CLOCK_CONTROL_NRF5_K32SRC_10PPM
-	bool "6 ppm to 10 ppm"
-
-config CLOCK_CONTROL_NRF5_K32SRC_5PPM
-	bool "3 ppm to 5 ppm"
-
-config CLOCK_CONTROL_NRF5_K32SRC_2PPM
-	bool "2 ppm"
-
-config CLOCK_CONTROL_NRF5_K32SRC_1PPM
-	bool "1 ppm"
-
-endchoice #CLOCK_CONTROL_NR5_ACCURACY
-
-if ENTROPY_NRF5_RNG
-
-choice ENTROPY_NRF5_RNG_IMPL
-	bool "nRF5 RNG driver implementation"
-	default ENTROPY_NRF5_RNG_NRFXLIB if BT_LL_NRFXLIB
-	help
-	  Choose the driver implementation
-
-# Selection of ENTROPY_HAS_DRIVER is removed to prevent compilation
-# fail because of no source is provided to library
-config ENTROPY_NRF5_RNG_NRFXLIB
-	bool "nRF5 RNG driver from nrfxlib"
-	depends on BT_LL_NRFXLIB
-        select ENTROPY_HAS_DRIVER
-	help
-	  This option enables the RNG peripheral, which is a random number
-	  generator, based on internal thermal noise, that provides a
-	  random 8-bit value to the host when read.
-
-endchoice
-
-endif #ENTROPY_NRF5_RNG
 
 if BT_LL_NRFXLIB
 
