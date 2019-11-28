@@ -25,7 +25,7 @@ config BT_LL_NRFXLIB
 	select BT_CTLR_CHAN_SEL_2_SUPPORT
 	# This controller only supports nRF52, it does not support 51 or
 	# 91 (91 doesn't even have the physical HW needed for BLE).
-	depends on SOC_SERIES_NRF52X
+	depends on (SOC_SERIES_NRF52X || SOC_SERIES_NRF53X)
 	help
 	  Use Nordic BLE Link Layer implementation.
 
@@ -40,21 +40,22 @@ choice BLE_CONTROLLER_VARIANT
 	default BLE_CONTROLLER_S112 if (SOC_NRF52810 || SOC_NRF52811)
 	default BLE_CONTROLLER_S132 if SOC_NRF52832
 	default BLE_CONTROLLER_S140 if SOC_NRF52840
+    default BLE_CONTROLLER_S140
 	help
 	  Select a BLE Controller variant.
 
 config BLE_CONTROLLER_S112
-	depends on (SOC_NRF52810 || SOC_NRF52811 || SOC_NRF52832)
+	depends on (SOC_NRF52810 || SOC_NRF52811 || SOC_NRF52832 || SOC_NRF5340_CPUNET)
 	bool "s112"
 
 config BLE_CONTROLLER_S132
-	depends on (SOC_NRF52810 || SOC_NRF52832)
+	depends on (SOC_NRF52810 || SOC_NRF52832 || SOC_NRF5340_CPUNET)
 	bool "s132"
 	select BT_CTLR_DATA_LEN_UPDATE_SUPPORT
 	select BT_CTLR_ADV_EXT_SUPPORT
 
 config BLE_CONTROLLER_S140
-	depends on (SOC_NRF52811 || SOC_NRF52840)
+	depends on (SOC_NRF52811 || SOC_NRF52840 || SOC_NRF5340_CPUNET)
 	select BT_CTLR_DATA_LEN_UPDATE_SUPPORT
 	select BT_CTLR_ADV_EXT_SUPPORT
 	bool "s140"
